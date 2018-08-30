@@ -1,0 +1,66 @@
+@import appLogic.BusInfo
+@(color: String)(bStop: String)(bNumber: String)(bArrival: String)(bBstation: String)(bToStation: String)(busListCorsoElvezia: java.util.List[BusInfo])(busListPonteMadonnetta: java.util.List[BusInfo])(busListUniversita: java.util.List[BusInfo])
+
+<table class="table table-striped" style="display: inline-block;">
+    <tr>
+        <th>Bus Number</th>
+        <th>Universit&agrave</th>
+        <th>Ponte Madonnetta</th>
+        <th>Corso Elvezia</th>
+        <th>Destination</th>
+    </tr>
+
+
+    @for((value, index) <- busListUniversita.zipWithIndex) {
+    @* @if(value.getNumber.equalsIgnoreCase(bNumber) && value.getTo.toLowerCase().contains(bBstation.toLowerCase())) {*@
+    @*<tr style="color :@color;">*@
+    @*} else {*@
+    @*<tr>*@
+    @*}*@
+    <tr>
+        <td> @if(value.getNumber.equals("5")) {
+            <img src="http://www.tplsa.ch/img/IconaLinea5.jpg">
+            }
+            @if(value.getNumber.equals("6")) {
+            <img src="http://www.tplsa.ch/img/IconaLinea6.jpg">
+            }
+            @if(value.getNumber.equals("461")) {
+            <h4>461</h4>}
+        </td>
+
+        @if(value.getNumber.equalsIgnoreCase(bNumber) && value.getTo.toLowerCase().contains(bBstation.toLowerCase()) && bStop.toLowerCase().equals("universita")) {
+        <td style="color:
+                                @color;">
+            } else {
+        <td>}
+            @value.getStop.getDepartureCalendarHour
+            : @value.getStop.getDepartureCalendarMinutes </td>
+        @if(value.getNumber.equals("461")) {
+        <td>  </td>
+        } else {
+        @if(value.getNumber.equalsIgnoreCase(bNumber) && value.getTo.toLowerCase().contains(bBstation.toLowerCase()) && bStop.toLowerCase().equals("ponte madonnetta")) {
+        <td style="color:
+                                    @color;">
+            } else {
+        <td>}
+
+            @busListPonteMadonnetta.get(index).getStop.getDepartureCalendarHour
+            : @busListPonteMadonnetta.get(index).getStop.getDepartureCalendarMinutes </td>
+        }
+        @if(!value.getNumber.equals("5")) {
+        <td>  </td>
+        } else {
+        @if(value.getNumber.equalsIgnoreCase(bNumber) && value.getTo.toLowerCase().contains(bBstation.toLowerCase()) && bStop.toLowerCase().equals("corso elvezia")) {
+        <td style="color:
+                                    @color;">
+            } else {
+        <td>}
+            @busListCorsoElvezia.get(index).getStop.getDepartureCalendarHour
+            : @busListCorsoElvezia.get(index).getStop.getDepartureCalendarMinutes </td>
+        }
+
+
+        <td>@value.getTo</td>
+    </tr>
+    }
+</table>

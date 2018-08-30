@@ -1,0 +1,148 @@
+@(faculty:String = session.get("faculty"))
+<html lang="en">
+<head>
+    <link rel="stylesheet" media="screen" href="/stylesheets/bootstrap.css">
+    <meta charset="UTF-8">
+    <title>Search faculty courses timetable</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <style>
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {display:none;}
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+    </style>
+</head>
+    <body onload="checkCheckbox()">
+<div class="row">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-2">
+
+        <form action="/timetable">
+            <h5 style="margin: 10px">Faculty:</h5>
+                <select  name="faculty" id="faculty"  style="margin-top: 10px; margin-bottom: 20px; width: 150px">
+                    <option value="Informatics">Informatics</option>
+                    <option value="Economics">Economics</option>
+                </select>
+            <br>
+            <br>
+            <label class="switch">
+                <input type="checkbox" id="checkbox1" onclick="showTimetable()">
+                <span class="slider round"></span>
+            </label>
+            <input type="button" class="btn btn-info btn-block" onclick="saveTimetable()" value="Save" style="width: 150px;"/>
+
+            <script>
+
+                function saveTimetable() {
+                    var faculty = document.getElementById("faculty");
+
+                    localStorage.setItem('faculty', faculty.options[faculty.selectedIndex].value);
+
+                    location.href = 'http://localhost:9000/timetableSave?faculty=' + faculty.options[faculty.selectedIndex].value;
+                }
+
+                function showTimetable() {
+                    var checkbox = document.getElementById("checkbox1").checked;
+                    sessionStorage.setItem('checked1', checkbox);
+                    if (checkbox)
+                    {
+                        if(localStorage.user1ts == 'false' && localStorage.user1tsrel == 'true')
+                        {
+                            localStorage.setItem("user1ts", "true");
+                        }
+                        if(localStorage.user2ts == 'false' && localStorage.user1tsrel == 'false')
+                        {
+                            localStorage.setItem("user2ts", "true");
+                        }
+                }
+
+                }
+
+                function checkCheckbox()
+                {
+                    if (sessionStorage.checked1 == 'true')
+                    {
+                        $("#checkbox1").attr('checked', 'checked');
+                    } else
+                    {
+                        $("#checkbox1").removeAttr('checked');
+                    }
+
+                    $('#faculty option:contains(' + localStorage.faculty + ')').prop({selected: true});
+
+                    if(localStorage.user1ts == undefined)
+                    {
+                        localStorage.setItem("user1ts", "false");
+                    }
+                    if(localStorage.user2ts == undefined)
+                    {
+                        localStorage.setItem("user2ts", "false");
+                    }
+                    if (localStorage.user1tsrel == undefined)
+                    {
+                        localStorage.setItem("user1tsrel", "true");
+                    }
+                }
+
+
+
+            </script>
+        </form>
+    </div>
+    <div class="col-sm-3"></div>
+</div>
+
+</body>
+</html>

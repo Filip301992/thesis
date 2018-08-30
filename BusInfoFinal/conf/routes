@@ -1,0 +1,45 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# An example controller showing a sample home page
+GET     /                           controllers.HomeController.index
+# An example controller showing how to use dependency injection
+GET     /count                      controllers.CountController.count
+# An example controller showing how to write asynchronous code
+GET     /message                    controllers.AsyncController.message
+
+# Test Controller - for bus info
+# these variable define what incoming parameters will page handle, eg:
+# http://localhost:9000/test?bNumber=5&bBstation=Lugano-Universita
+GET     /busTime                    controllers.MainController.processRequest()
+
+GET     /busTimeTable                    controllers.MainController.processRequestTable()
+
+GET     /showBusTime                    controllers.MainController.showBusTime()
+
+GET     /saveBusTime                controllers.MainController.saveBusTime(bStop:String, bNumber:String, bBstation:String , color:String)
+
+## process save / delete request
+#GET     /test/save                   controllers.MainController.saveData(save:String, bNumber:String, bBstation:String)
+
+# Search controller - for page
+GET     /search                    controllers.SearchController.defaultResponse
+
+# Attach CSS
+GET     /stylesheets/*file          @controllers.Assets.at(path="/public/stylesheets", file)
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+
+# Controller for TimeTable
+GET     /timetable                    controllers.TimetableController.defaultResponseMain()
+
+GET     /timetableRead                    controllers.TimetableController.defaultResponse(faculty:String)
+
+GET     /timetableSave                    controllers.TimetableController.saveTimetable(faculty:String)
+
+GET     /timetableSaveMain                    controllers.TimetableController.saveTimetableMain(faculty:String)
+
+# Controller for TimeTable
+GET     /timetableSearch                   controllers.TimetableSearchController.defaultResponse()

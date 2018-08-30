@@ -1,0 +1,236 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" media="screen" href="/stylesheets/bootstrap.css">
+    <meta charset="UTF-8">
+    <title>Search for station</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+        }
+
+        .switch input {display:none;}
+
+        .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+        }
+
+        .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+        }
+
+        input:checked + .slider {
+        background-color: #2196F3;
+        }
+
+        input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+        border-radius: 34px;
+        }
+
+        .slider.round:before {
+        border-radius: 50%;
+        }
+    </style>
+</head>
+<body onload="checkCheckbox()">
+<div class="row">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-1" style="margin-top: 20px">
+
+
+        <form action="/busTime">
+            <h5>Bus Stop</h5>
+            <select  name="bStop" id="bStop"  style="margin-top: 10px; margin-bottom: 20px; width: 150px">
+                <option value="Universita">Universit&agrave</option>
+                <option value="Ponte Madonnetta">Ponte Madonnetta</option>
+                <option value="Corso Elvezia">Corso Elvezia</option>
+            </select>
+
+            <h5>Bus</h5>
+            <select  name="bNumber" id="bNumber" onchange = "populate(this.selectedIndex)" style="margin-top: 10px; margin-bottom: 20px; width: 50px">
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="461">461</option>
+            </select>
+
+            <h5>Destination </h5>
+            <select  name="bBstation" id = "bBstation" style="margin-top: 10px; margin-bottom: 20px;
+                width: 150px;">
+
+                <option id = "dest1" value="Viganello"> Viganello</option>
+                <option id = "dest2" value="Lamone"> Lamone</option>
+            </select>
+
+
+            <h5>Color </h5>
+            <select  name="color" id = "color" onchange = "changeColor(this.selectedIndex)" style="margin-top: 10px; margin-bottom: 20px;
+                width: 100px;">
+                <option  value="red">red</option>
+                <option  value="blue">blue</option>
+                <option  value="yellow">yellow</option>
+                <option  value="green">green</option>
+
+            </select>
+            <p  id = "colorBox" style = "
+                background-color: red;
+                width: 100px;
+                height: 30px;"> </p>
+
+            <label class="switch">
+                <input type="checkbox" id="checkbox" onclick="showBusTime()">
+                <span class="slider round"></span>
+            </label>
+
+            <input type="button" class="btn btn-info btn-block" onclick="saveBusTime()" value="Save" style="width: 150px;"/>
+
+            <script>
+                function populate(selectedvalue) {
+
+                    var d1 = document.getElementById("dest1");
+                    var d2 = document.getElementById("dest2");
+
+                    if (selectedvalue == "0") {
+                        d2.text = 'Viganello'
+                        d2.value = 'Viganello'
+                        d1.text = 'Lamone'
+                        d1.value = 'Lamone'
+                    }
+                    if (selectedvalue == "1") {
+                        d1.text = 'Cornaredo'
+                        d1.value = 'Cornaredo'
+                        d2.text = 'Stazione'
+                        d2.value = 'Stazione'
+                    }
+                    if (selectedvalue == "2") {
+                        d1.text = 'Villa Luganese'
+                        d1.value = 'Villa Luganese'
+                        d2.text = 'Tesserete'
+                        d2.value = 'Tesserete'
+                    }
+
+
+                }
+
+                function changeColor(selectedvalue) {
+                    var clr = document.getElementById("colorBox")
+                    if (selectedvalue == "0"){
+                        clr.style.backgroundColor = "red"
+                    }
+                    if (selectedvalue == "1"){
+                        clr.style.backgroundColor = "blue"
+                    }
+                    if (selectedvalue == "2"){
+                        clr.style.backgroundColor = "yellow"
+                    }
+                    if (selectedvalue == "3"){
+                        clr.style.backgroundColor = "green"
+                    }
+                    sessionStorage.setItem('colorBox', selectedvalue);
+                }
+
+                function saveBusTime() {
+                    var bStop = document.getElementById("bStop");
+                    var bNumber = document.getElementById("bNumber");
+                    var bBstation = document.getElementById("bBstation");
+                    var color = document.getElementById("color");
+
+                    sessionStorage.setItem('bStop', bStop.options[bStop.selectedIndex].value);
+                    sessionStorage.setItem('bNumber', bNumber.options[bNumber.selectedIndex].value);
+                    sessionStorage.setItem('bBstation', bBstation.options[bBstation.selectedIndex].value);
+                    sessionStorage.setItem('color', color.options[color.selectedIndex].value);
+
+                    location.href = 'http://localhost:9000/saveBusTime?bStop=' + bStop.options[bStop.selectedIndex].value + '&bNumber=' + bNumber.options[bNumber.selectedIndex].value + '&bBstation=' + bBstation.options[bBstation.selectedIndex].value + '&color=' + color.options[color.selectedIndex].value;
+                }
+
+                function showBusTime() {
+                    var checkbox = document.getElementById("checkbox").checked;
+                    sessionStorage.setItem('checked', checkbox);
+
+                    if (checkbox)
+                    {
+                        if(localStorage.user1 == 'false' && localStorage.user1rel == 'true')
+                        {
+                            localStorage.setItem("user1", "true");
+                        }
+                        if(localStorage.user2 == 'false' && localStorage.user1rel == 'false')
+                        {
+                            localStorage.setItem("user2", "true");
+                        }
+
+                        location.href = 'http://localhost:9000/showBusTime';
+                    }
+                }
+
+                function checkCheckbox()
+                {
+                    if (sessionStorage.checked == 'true')
+                    {
+                        $("#checkbox").attr('checked', 'checked');
+                    } else
+                    {
+                        $("#checkbox").removeAttr('checked');
+                    }
+
+                    $('#bStop option:contains(' + sessionStorage.bStop + ')').prop({selected: true});
+                    $('#bNumber option:contains(' + sessionStorage.bNumber + ')').prop({selected: true});
+                    $('#bBstation option:contains(' + sessionStorage.bBstation + ')').prop({selected: true});
+                    $('#color option:contains(' + sessionStorage.color + ')').prop({selected: true});
+
+                    changeColor(sessionStorage.colorBox);
+
+                    if(localStorage.user1 == undefined)
+                    {
+                        localStorage.setItem("user1", "false");
+                    }
+                    if(localStorage.user2 == undefined)
+                    {
+                        localStorage.setItem("user2", "false");
+                    }
+                    if (localStorage.user1rel == undefined)
+                    {
+                        localStorage.setItem("user1rel", "true");
+                    }
+                }
+                </script>
+
+
+        </form>
+    </div>
+    <div class="col-sm-4"></div>
+</div>
+
+</body>
+</html>

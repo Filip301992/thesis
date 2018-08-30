@@ -1,0 +1,54 @@
+@(bNumber:String)(bArrival:String)(bBstation:String)(bToStation:String)
+<html>
+<!-- @(bNumber:String)(bArrival:String)(bBstation:String)
+at begining of the page imply that these parameters are being sent to html page dinamically
+and sent to variables bellow-->
+<head>
+    <title>Bus Arrival Time Checker</title>
+
+    <link rel="stylesheet" media="screen" href="/stylesheets/bootstrap.css">
+
+    <script type="text/javascript">
+      setTimeout(function(){
+        location = ''
+      },10000)
+    </script>
+
+</head>
+<body class="container">
+
+<div class="row">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-8">
+        <table class="table table-striped">
+            <tr>
+                <th>Bus Number</th>
+                <th>Arrives at</th>
+                <th>For station</th>
+                <th>End station</th>
+            </tr>
+            <tr>
+                <!-- Set data for bus arrival:
+                 bNumber - bus number
+                 bArrival - bus arrival
+                 bBstation - bus station
+                 bToStation - end point bus station -->
+                <td>@bNumber</td>
+                <td>@bArrival</td>
+                <td>@bBstation</td>
+                <td>@bToStation</td>
+            </tr>
+            <tr>
+                <th><a href="http://localhost:9000/test/save?save=reset&bNumber=@bNumber&bBstation=@bBstation" style="text-decoration: none;"><button type="button" class="btn btn-warning btn-block">Reset saved</button></a></th>
+                <th><a href="http://localhost:9000/test/save?save=true&bNumber=@bNumber&bBstation=@bBstation" style="text-decoration: none;"><button type="button" class="btn btn-success btn-block">Save as default</button></a></th>
+                <th></th>
+                <th><a href="http://localhost:9000/test?bNumber=@bNumber&bBstation=@bToStation" style="text-decoration: none;" target="_blank"><button type="button" class="btn btn-info btn-block">End station info</button></a></th>
+            </tr>
+
+        </table>
+    </div>
+    <div class="col-sm-1"></div>
+</div>
+
+</body>
+</html>
